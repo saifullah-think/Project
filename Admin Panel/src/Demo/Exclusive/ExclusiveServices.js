@@ -2,38 +2,38 @@ import React, { Component } from 'react'
 import { Row, Col, Card, Table, Tabs, Tab, InputGroup, FormControl, Modal, Form } from 'react-bootstrap';
 import Aux from "../../hoc/_Aux";
 import DEMO from "../../store/constant";
-import BaseUrl from '../Api/Api'
+import { connect } from 'react-redux'
 
 
 
 
 
-export default class ExclusiveService extends Component {
+class ExclusiveService extends Component {
 
     state = {
         ViewModal: false,
         count: 1,
         ExclusiveServiceData: [],
         Image: '',
-       Price:'',
-       Category:'',
-       ServiceTitle:'',
-       ServiceDescription:'',
-       Date:'',
-       userImage:'',
-       userName:'',
-       userDetail:'',
-       userCountry:'',
-       totalRatings:'',
+        Price: '',
+        Category: '',
+        ServiceTitle: '',
+        ServiceDescription: '',
+        Date: '',
+        userImage: '',
+        userName: '',
+        userDetail: '',
+        userCountry: '',
+        totalRatings: '',
         RegisterModal: false,
         updateModal: false,
         ImageModal: false,
         Id: '',
         SelectImage: [],
         Imageurl: '',
-        Reviews:[],
-        index:0,
-        reviewModal:false
+        Reviews: [],
+        index: 0,
+        reviewModal: false
     }
 
     componentDidMount() {
@@ -43,7 +43,7 @@ export default class ExclusiveService extends Component {
     }
 
     getExclusiveServiceData = () => {
-        fetch(`${BaseUrl}/readexclusiveservices`, {
+        fetch(`${this.props.BaseUrl}/readexclusiveservices`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -53,7 +53,7 @@ export default class ExclusiveService extends Component {
         })
             .then((response) => response.json())
             .then((responseData) => {
-            
+
                 this.setState({ ExclusiveServiceData: responseData })
             }).catch((err) => {
                 alert(err.message)
@@ -65,30 +65,30 @@ export default class ExclusiveService extends Component {
 
 
     AddExclusiveServices = () => {
-        const { Image,ServiceTitle,Price,Category,ServiceDescription,Date,totalRatings,userImage,userName,userDetail,userCountry,Reviews} = this.state;
+        const { Image, ServiceTitle, Price, Category, ServiceDescription, Date, totalRatings, userImage, userName, userDetail, userCountry, Reviews } = this.state;
 
 
         let body = {
-        ServiceTitle:ServiceTitle,
-        Price:Price,
-        Category:Category,
-        ServiceDescription:ServiceDescription,
-        Images:Image,
-        Date:Date,
-        totalRatings:totalRatings,
-        Reviews:Reviews,
-        userName:userName,
-        userCountry: userCountry,
-        userDetail:userDetail,
-        userImage:userImage
+            ServiceTitle: ServiceTitle,
+            Price: Price,
+            Category: Category,
+            ServiceDescription: ServiceDescription,
+            Images: Image,
+            Date: Date,
+            totalRatings: totalRatings,
+            Reviews: Reviews,
+            userName: userName,
+            userCountry: userCountry,
+            userDetail: userDetail,
+            userImage: userImage
 
 
         }
 
-        fetch(`${BaseUrl}/addexclusiveservice`, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl}/addexclusiveservice`, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
-            
+
                 this.setState({ RegisterModal: false })
 
 
@@ -97,9 +97,8 @@ export default class ExclusiveService extends Component {
 
 
 
-    renderReviews = (item) =>
-    {
-        this.setState({Reviews:item.Reviews,reviewModal:true})
+    renderReviews = (item) => {
+        this.setState({ Reviews: item.Reviews, reviewModal: true })
     }
 
 
@@ -109,8 +108,8 @@ export default class ExclusiveService extends Component {
             return (
 
                 <tr>
-                    
-                  <td><img src={item.Images} style={{ width: 50, height: 50, borderRadius: 25 }}/></td>                      <td >{item.ServiceTitle}</td>
+
+                    <td><img src={item.Images} style={{ width: 50, height: 50, borderRadius: 25 }} /></td>                      <td >{item.ServiceTitle}</td>
                     <td >{item.Price}</td>
                     <td>{item.Category}</td>
                     <td>{item.ServiceDescription}</td>
@@ -122,7 +121,7 @@ export default class ExclusiveService extends Component {
                     <td>{item.userDetail}</td>
 
                     <td>
-                        <a href={DEMO.BLANK_LINK} className="label btn-sm bg-success text-white f-12" onClick={() => this.setState({ViewModal:true,Image:item.Images,ServiceTitle:item.ServiceTitle,Price:item.Price,Category:item.Category,ServiceDescription:item.ServiceDescription,Date:item.Date,totalRatings:item.totalRatings,userImage:item.userImage,userCountry:item.userCountry,userDetail:item.userDetail})}><i className="icon feather icon-eye text-white" /> View</a>
+                        <a href={DEMO.BLANK_LINK} className="label btn-sm bg-success text-white f-12" onClick={() => this.setState({ ViewModal: true, Image: item.Images, ServiceTitle: item.ServiceTitle, Price: item.Price, Category: item.Category, ServiceDescription: item.ServiceDescription, Date: item.Date, totalRatings: item.totalRatings, userImage: item.userImage, userCountry: item.userCountry, userDetail: item.userDetail })}><i className="icon feather icon-eye text-white" /> View</a>
                         <a href={DEMO.BLANK_LINK} className="label btn-sm bg-primary text-white f-12" onClick={() => this.renderReviews(item)}><i className="icon feather icon-thumbs-up text-white" /> Reviews</a>
                         <a href={DEMO.BLANK_LINK} className="label btn-sm bg-info text-white f-12" onClick={() => this.setState({ updateModal: true, Id: item._id })}><i className="icon feather icon-edit text-white" /> Update</a>
                         <a href={DEMO.BLANK_LINK} className="label btn-sm bg-danger text-white f-12" onClick={() => this.delete(item)}><i className="icon feather icon-trash-2 text-white" /> Delete</a>
@@ -143,13 +142,13 @@ export default class ExclusiveService extends Component {
         let body = {
             Id: item._id
         }
-        fetch(`${BaseUrl}/deleteexclusiveservice`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl}/deleteexclusiveservice`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
                 let data = this.state.ExclusiveServiceData.filter((list => {
                     return list._id !== response._id
                 }))
-                
+
                 this.setState({
                     ExclusiveServiceData: data
                 })
@@ -160,7 +159,7 @@ export default class ExclusiveService extends Component {
     }
 
     render() {
-        const {Reviews}=this.state;
+        const { Reviews } = this.state;
         return (
             <Aux>
 
@@ -195,7 +194,7 @@ export default class ExclusiveService extends Component {
                                             <th>UserImage</th>
                                             <th>Username</th>
                                             <th>userCountry</th>
-                                            <th>userDetail</th>                                       
+                                            <th>userDetail</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -246,7 +245,7 @@ export default class ExclusiveService extends Component {
                     </Modal>
 
 
-{/* Reviews modal */}
+                    {/* Reviews modal */}
 
                     <Modal
                         show={this.state.reviewModal}
@@ -254,26 +253,26 @@ export default class ExclusiveService extends Component {
                         aria-labelledby="contained-modal-title-vcenter"
                         centered
                     >
-                        <Modal.Header className="bg-dark text-white" closeButton onClick={() => { this.setState({reviewModal:false }) }}>
+                        <Modal.Header className="bg-dark text-white" closeButton onClick={() => { this.setState({ reviewModal: false }) }}>
                             <Modal.Title id="contained-modal-title-vcenter">
                                 Reviews
       </Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                         {this.state.Reviews && this.state.Reviews.map((item,i)=>{
-                         return  <div>
-                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                               <h5 style={{ fontWeight: 'bold' }}>Image:<img src={item.buyerImage} style={{ width: 50, height: 50, borderRadius: 25 }} onClick={() => alert("done")} /></h5>
-                               <h5 style={{ fontWeight: 'bold' }}>BuyerName:{item.buyerName} </h5>
-                           </div>
-                           <h5 style={{ fontWeight: 'bold' }}>Date:{this.state.Date}</h5>
-                           <h5 style={{ fontWeight: 'bold' }}>Message:{item.Messege}</h5>
-                           <h5 style={{ fontWeight: 'bold' }}>Rating:{item.Ratings}</h5>
-                         
+                            {this.state.Reviews && this.state.Reviews.map((item, i) => {
+                                return <div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <h5 style={{ fontWeight: 'bold' }}>Image:<img src={item.buyerImage} style={{ width: 50, height: 50, borderRadius: 25 }} onClick={() => alert("done")} /></h5>
+                                        <h5 style={{ fontWeight: 'bold' }}>BuyerName:{item.buyerName} </h5>
+                                    </div>
+                                    <h5 style={{ fontWeight: 'bold' }}>Date:{this.state.Date}</h5>
+                                    <h5 style={{ fontWeight: 'bold' }}>Message:{item.Messege}</h5>
+                                    <h5 style={{ fontWeight: 'bold' }}>Rating:{item.Ratings}</h5>
 
 
-                       </div>
-                         })}
+
+                                </div>
+                            })}
                         </Modal.Body>
                     </Modal>
 
@@ -347,7 +346,7 @@ export default class ExclusiveService extends Component {
                                     <Form.Control type="boolean" placeholder="Username" onChange={(e) => { this.setState({ userName: e.target.value }) }} />
                                 </Form.Group>
 
-                                
+
                                 <Form.Group controlId="formGroupEmail">
                                     <Form.Label>Country</Form.Label>
                                     <Form.Control type="boolean" placeholder="Country" onChange={(e) => { this.setState({ userCountry: e.target.value }) }} />
@@ -355,7 +354,7 @@ export default class ExclusiveService extends Component {
 
 
 
-                                
+
                                 <Form.Group controlId="formGroupEmail">
                                     <Form.Label>User Detail</Form.Label>
                                     <Form.Control type="boolean" placeholder="User Detail" onChange={(e) => { this.setState({ userDetail: e.target.value }) }} />
@@ -461,3 +460,17 @@ export default class ExclusiveService extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+
+    return {
+
+        BaseUrl: state.Baseurl,
+
+
+    }
+
+
+}
+
+
+export default connect(mapStateToProps, null)(ExclusiveService);

@@ -6,11 +6,11 @@ import draftToHtml from 'draftjs-to-html';
 import Aux from "../../hoc/_Aux";
 import DEMO from "../../store/constant";
 import {firebase} from '../../Config/Firebase'
+import {connect} from 'react-redux'
 import {Input,message, Upload} from 'antd'
-import BaseUrl from '../Api/Api';
 
 
-export default class Listing extends Component {
+ class Blog extends Component {
 
     state = {
         
@@ -43,7 +43,7 @@ export default class Listing extends Component {
 
 
     FetchBlogs = () => {
-        return fetch(`${BaseUrl}/readblogs`, {
+        return fetch(`${this.props.BaseUrl}/readblogs`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -73,7 +73,7 @@ export default class Listing extends Component {
 
         }
 
-        fetch(`${BaseUrl}/api/deleteBlog`,
+        fetch(`${this.props.BaseUrl}/api/deleteBlog`,
             {
                 method: "DELETE",
                 body: JSON.stringify(body),
@@ -129,7 +129,7 @@ export default class Listing extends Component {
         }
         if (this.state.CatName !== '') {
 
-            fetch(`${BaseUrl}/addblogcategory`,
+            fetch(`${this.props.BaseUrl}/addblogcategory`,
                 {
                     method: "POST",
                     body: JSON.stringify(body),
@@ -179,7 +179,7 @@ export default class Listing extends Component {
             comments:[]
         }
       
-        fetch(`${BaseUrl}/addnewblog`,
+        fetch(`${this.props.BaseUrl}/addnewblog`,
             {
                 method: "PUT",
                 body: JSON.stringify(blog),
@@ -418,3 +418,18 @@ export default class Listing extends Component {
     }
 }
 
+const mapStateToProps = (state) =>
+{
+   
+  return {
+
+ BaseUrl:state.Baseurl,
+
+    
+  }
+  
+
+}
+
+
+export default connect(mapStateToProps,null)(Blog);

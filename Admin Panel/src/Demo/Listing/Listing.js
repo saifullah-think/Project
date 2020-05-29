@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { Row, Col, Card, Table, Tabs, Tab, InputGroup, FormControl, Modal } from 'react-bootstrap';
 import Aux from "../../hoc/_Aux";
 import DEMO from "../../store/constant";
-import BaseUrl from '../Api/Api'
+import { connect } from 'react-redux'
 
-export default class Listing extends Component {
+
+class Listing extends Component {
 
     state = {
         ViewModal: false,
@@ -31,7 +32,7 @@ export default class Listing extends Component {
 
 
     FetchListing = () => {
-        fetch(`${BaseUrl}/api/getListings:${this.state.count}`, {
+        fetch(`${this.props.BaseUrl}/api/getListings:${this.state.count}`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -54,7 +55,7 @@ export default class Listing extends Component {
         let body = {
             id: item._id
         }
-        fetch(`${BaseUrl}/api/deleteListing`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl}/api/deleteListing`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
                 let data = this.state.ListingData.filter((list => {
@@ -83,7 +84,7 @@ export default class Listing extends Component {
             {
                 title: e.target.value
             }
-            fetch(`${BaseUrl}/api/searchListing`, {
+            fetch(`${this.props.BaseUrl}/api/searchListing`, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -229,3 +230,17 @@ export default class Listing extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+
+    return {
+
+        BaseUrl: state.Baseurl,
+
+
+    }
+
+
+}
+
+
+export default connect(mapStateToProps, null)(Listing);

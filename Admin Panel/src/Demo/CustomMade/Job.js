@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import { Row, Col, Card, Table, Tabs, Tab, InputGroup, FormControl, Modal } from 'react-bootstrap';
 import Aux from "../../hoc/_Aux";
 import DEMO from "../../store/constant";
-import BaseUrl from '../Api/Api'
+import { connect } from 'react-redux'
 
 
-export default class Jobs extends Component {
+
+class Jobs extends Component {
 
     state = {
         ViewModal: false,
@@ -31,7 +32,7 @@ export default class Jobs extends Component {
     }
 
     getJob = () => {
-        fetch(`${BaseUrl}/readjob`, {
+        fetch(`${this.props.BaseUrl}/readjob`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -53,10 +54,9 @@ export default class Jobs extends Component {
         let body = {
             Id: item._id
         }
-        fetch(`${BaseUrl}/deletejob`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl}/deletejob`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
-                console.log(response)
 
                 let data = this.state.JobData.filter(elem => {
                     return elem._id !== response._id;
@@ -163,7 +163,7 @@ export default class Jobs extends Component {
                             </Card.Body>
                         </Card>
 
-            
+
                     </Col>
 
 
@@ -204,3 +204,17 @@ export default class Jobs extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+
+    return {
+
+        BaseUrl: state.Baseurl,
+
+
+    }
+
+
+}
+
+
+export default connect(mapStateToProps, null)(Jobs);

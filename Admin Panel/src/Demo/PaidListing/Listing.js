@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 import { Row, Col, Card, Table, Tabs, Tab, InputGroup, FormControl, Modal, Form, Button } from 'react-bootstrap';
 import Aux from "../../hoc/_Aux";
-import {connect} from 'react-redux'
-// import {MyApiUrl} from '../../store/actions';
+import { connect } from 'react-redux'
 import DEMO from "../../store/constant";
-import BaseUrl from '../Api/Api'
 
 
 
@@ -19,7 +17,6 @@ class Listing extends Component {
 
     }
     componentDidMount() {
-        console.log("props===>",this.props.BaseUrl)
         this.FetchData();
     }
 
@@ -51,13 +48,11 @@ class Listing extends Component {
     UpdateStatus = () => {
         let body =
         {
-            id:this.state.Id,
-            Status:this.state.Status
+            id: this.state.Id,
+            Status: this.state.Status
         }
-        console.log("body", body)
-
         if (this.state.Status !== 'Select Status') {
-            return fetch(`${BaseUrl}/UpdateStatus`, {
+            return fetch(`${this.props.BaseUrl == undefined ? console.log("chala") : `${this.props.BaseUrl}/UpdateStatus`}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -205,20 +200,17 @@ class Listing extends Component {
 }
 
 
-const mapStateToProps = (state) =>
-{
-    console.log("state---->",state)
-    
-  
-  return {
+const mapStateToProps = (state) => {
 
-    BaseUrl:state.Baseurl,
+    return {
 
-    
-  }
-  
+        BaseUrl: state.Baseurl,
+
+
+    }
+
 
 }
 
 
-export default connect(mapStateToProps,null)(Listing);
+export default connect(mapStateToProps, null)(Listing);

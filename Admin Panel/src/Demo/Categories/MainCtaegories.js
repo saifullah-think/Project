@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { Row, Col, Card, Table, Tabs, Tab, InputGroup, FormControl, Modal, Form, FormLabel, Button, Alert } from 'react-bootstrap';
 import Aux from "../../hoc/_Aux";
 import DEMO from "../../store/constant";
-import BaseUrl from '../Api/Api'
+import { connect } from 'react-redux'
 
-export default class ApprovedUsers extends Component {
+class MainCategory extends Component {
 
     state = {
         ViewModal: false,
@@ -73,7 +73,7 @@ export default class ApprovedUsers extends Component {
         }
         if (Name !== '' || SelectIcon !== '' || SetColor !== '') {
 
-            fetch(`${BaseUrl}/api/addCategory`, {
+            fetch(`${this.props.BaseUrl}/api/addCategory`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -104,7 +104,7 @@ export default class ApprovedUsers extends Component {
         let body = {
             id: item._id
         }
-        fetch(`${BaseUrl}/api/deleteCategory`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl}/api/deleteCategory`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
                 let data = this.state.CategoryData.filter(elem => {
@@ -185,7 +185,7 @@ export default class ApprovedUsers extends Component {
             iconType: SelectIcon,
             iconName: iconName,
         }
-        fetch(`${BaseUrl}/api/updateCat`, {
+        fetch(`${this.props.BaseUrl}/api/updateCat`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -220,7 +220,7 @@ export default class ApprovedUsers extends Component {
         }
 
 
-        fetch(`${BaseUrl}/api/updateCat`, {
+        fetch(`${this.props.BaseUrl}/api/updateCat`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -256,7 +256,7 @@ export default class ApprovedUsers extends Component {
             iconName: SelectIcon
         }
 
-        fetch(`${BaseUrl}/api/addSubCategory`, {
+        fetch(`${this.props.BaseUrl}/api/addSubCategory`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -285,7 +285,7 @@ export default class ApprovedUsers extends Component {
             id: this.state.categoryId,
             subCategories: filtered
         }
-        fetch(`${BaseUrl}/api/deleteSubCategory`,
+        fetch(`${this.props.BaseUrl}/api/deleteSubCategory`,
             {
                 method: "PUT",
                 body: JSON.stringify(body),
@@ -330,7 +330,7 @@ export default class ApprovedUsers extends Component {
         }
 
 
-        fetch(`${BaseUrl}/api/updateSubCat`, {
+        fetch(`${this.props.BaseUrl}/api/updateSubCat`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -397,7 +397,7 @@ export default class ApprovedUsers extends Component {
                             </Card> :
                             <Card className='Recent-Users'>
                                 <Card.Header style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <i className="icon feather icon-arrow-left text-black" onClick={() => { console.log("hello") }} style={{ size: 30 }} />
+                                    <i className="icon feather icon-arrow-left text-black" style={{ size: 30 }} />
                                     <Card.Title as='h5'>Sub-Category</Card.Title>
                                     <div className="text-right">
                                         <a href={DEMO.BLANK_LINK} className="label btn-sm bg-info text-white f-12" onClick={() => this.setState({ subaddmodal: true })}><i className="icon feather icon-plus text-white" />Add Sub-Category</a>
@@ -724,3 +724,18 @@ export default class ApprovedUsers extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+
+
+    return {
+
+        BaseUrl: state.Baseurl,
+
+
+    }
+
+
+}
+
+
+export default connect(mapStateToProps, null)(MainCategory);

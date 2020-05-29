@@ -12,26 +12,23 @@ export default {
                     url: '/dashboard',
                     icon: 'feather icon-home',
                 },
-                {
-                    id: 'Users',
-                    title: 'Users',
-                    type: 'collapse',
-                    icon: 'feather icon-users',
-                    children: [
+
                         {
                             id: 'user-1',
                             title: 'Approved Users',
                             type: 'item',
                             url: '/users/approved-users',
+                            icon: 'feather icon-check',
                         },
                         {
                             id: 'user-2',
                             title: 'Un-Approved Users',
                             type: 'item',
                             url: '/users/unapproved-users',
+                            icon: 'feather icon-delete'
                         },
-                    ]
-                },
+                    
+    
                 {
                     id: 'Videos',
                     title: 'Videos',
@@ -84,40 +81,35 @@ export default {
                     icon: 'feather icon-edit-2',
                 },
 
-                {
-                    id: 'Exclusive',
-                    title: 'Exclusive',
-                    type: 'collapse',
-                    icon: 'feather icon-settings',
-                    children: [
+                
+                    
                         {
                             id: 'Ex-1',
                             title: 'Exclusive',
                             type: 'item',
                             url: '/Exclusive',
+                            icon:'feather icon-folder'
                         },
                         {
                             id: 'Ex-2',
                             title: 'Exclusive Category',
                             type: 'item',
                             url: '/ExclusiveCategory',
+                            icon:'feather icon-flag'
                         },
                         {
                             id: 'Ex-3',
                             title: 'Exclusive Services',
                             type: 'item',
                             url: '/ExclusiveServices',
+                            icon:'feather icon-server'
                         },
-                    ]
-                },
+                    
+                    
 
 
-                {
-                    id: 'Custom Made',
-                    title: 'Custom Made',
-                    type: 'collapse',
-                    icon: 'feather icon-settings',
-                    children: [
+              
+                   
                         {
                             id: 'CM-1',
                             title: 'Job',
@@ -130,15 +122,16 @@ export default {
                             title: 'Job Category',
                             type: 'item',
                             url: '/JobCategory',
+                            icon:'feather icon-file-text'
                         },
                         {
                             id: 'CM-3',
                             title: 'Order',
                             type: 'item',
                             url: '/Order',
+                            icon:'feather icon-briefcase'
                         },
-                    ]
-                },
+                    
 
 
 

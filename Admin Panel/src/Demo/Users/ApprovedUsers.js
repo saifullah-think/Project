@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { Row, Col, Card, Table, Tabs, Tab, InputGroup, FormControl, Modal } from 'react-bootstrap';
 import Aux from "../../hoc/_Aux";
 import DEMO from "../../store/constant";
-import BaseUrl from '../Api/Api'
+import { connect } from 'react-redux'
 
-export default class ApprovedUsers extends Component {
+
+ class ApprovedUsers extends Component {
 
     state = {
         ViewModal: false,
@@ -19,13 +20,12 @@ export default class ApprovedUsers extends Component {
 
     componentDidMount() {
         this.getAllUser();
-  
+
 
     }
 
-    getAllUser = () =>
-    {
-        fetch(`${BaseUrl}/api/getUsers:${this.state.count}`, {
+    getAllUser = () => {
+        fetch(`${this.props.BaseUrl}/api/getUsers:${this.state.count}`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -47,17 +47,15 @@ export default class ApprovedUsers extends Component {
         let body = {
             uid: item.firebaseUID
         }
-        fetch(`${BaseUrl}/api/deleteAdminOrUSer`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl}/api/deleteAdminOrUSer`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
-                console.log(response)
 
-                let data=this.state.UserData.filter(elem=>{
-                    return elem._id !==response.data._id;
-        
+                let data = this.state.UserData.filter(elem => {
+                    return elem._id !== response.data._id;
+
                 })
-                console.log(data.length);
-                this.setState({UserData:data})
+                this.setState({ UserData: data })
 
 
             }).catch(err => alert(err))
@@ -73,7 +71,7 @@ export default class ApprovedUsers extends Component {
             uid: item.firebaseUID
         }
 
-        fetch(`${BaseUrl}/api/bloclkuser`, {
+        fetch(`${this.props.BaseUrl}/api/bloclkuser`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -83,7 +81,6 @@ export default class ApprovedUsers extends Component {
         })
             .then((response) => response.json())
             .then((responseData) => {
-                console.log("Res====>", responseData)
                 this.setState({ flag: true })
             }).catch((err) => {
                 alert(err.message)
@@ -105,7 +102,7 @@ export default class ApprovedUsers extends Component {
         }
 
 
-        fetch(`${BaseUrl}/api/Unbloclkuser`, {
+        fetch(`${this.props.BaseUrl}/api/Unbloclkuser`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -129,7 +126,7 @@ export default class ApprovedUsers extends Component {
             name: e.target.value
         }
 
-        fetch(`${BaseUrl}/api/userSearch`, {
+        fetch(`${this.props.BaseUrl}/api/userSearch`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -223,7 +220,7 @@ export default class ApprovedUsers extends Component {
                             </Card.Body>
                         </Card>
 
-                        <a href={DEMO.BLANK_LINK} className="label btn-sm bg-primary text-white f-12 " onClick={() =>{console.log(this.state.count)}}><i className="icon feather 2 text-white" /> Next</a>
+                        <a href={DEMO.BLANK_LINK} className="label btn-sm bg-primary text-white f-12 " ><i className="icon feather 2 text-white" /> Next</a>
 
                     </Col>
 
@@ -258,3 +255,17 @@ export default class ApprovedUsers extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+
+    return {
+
+        
+        BaseUrl: state.Baseurl,
+
+    }
+
+
+}
+
+
+export default connect(mapStateToProps, null)(ApprovedUsers);

@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { Row, Col, Card, Table, Tabs, Tab, InputGroup, FormControl, Modal } from 'react-bootstrap';
 import Aux from "../../hoc/_Aux";
 import DEMO from "../../store/constant";
-import BaseUrl from '../Api/Api'
+import { connect } from 'react-redux'
 
-export default class Order extends Component {
+class Order extends Component {
 
     state = {
         ViewModal: false,
@@ -27,7 +27,7 @@ export default class Order extends Component {
     }
 
     getOrder = () => {
-        fetch(`${BaseUrl}/readorders`, {
+        fetch(`${this.props.BaseUrl}/readorders`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -49,7 +49,7 @@ export default class Order extends Component {
         let body = {
             Id: item._id
         }
-        fetch(`${BaseUrl}/deletejob`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl}/deletejob`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
 
@@ -190,3 +190,19 @@ export default class Order extends Component {
     }
 }
 
+
+
+const mapStateToProps = (state) => {
+
+    return {
+
+        BaseUrl: state.Baseurl,
+
+
+    }
+
+
+}
+
+
+export default connect(mapStateToProps, null)(Order);

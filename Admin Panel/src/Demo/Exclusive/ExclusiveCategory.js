@@ -2,19 +2,20 @@ import React, { Component } from 'react'
 import { Row, Col, Card, Table, Tabs, Tab, InputGroup, FormControl, Modal, Form } from 'react-bootstrap';
 import Aux from "../../hoc/_Aux";
 import DEMO from "../../store/constant";
-import BaseUrl from '../Api/Api'
+import { connect } from 'react-redux'
 
 
 
 
 
-export default class ExclusiveCategory extends Component {
+
+class ExclusiveCategory extends Component {
 
     state = {
         Addmodal: false,
-       Name:'',
-       ExclusiveCategoryData:[]
-      
+        Name: '',
+        ExclusiveCategoryData: []
+
 
     }
 
@@ -25,7 +26,7 @@ export default class ExclusiveCategory extends Component {
     }
 
     getExlusiveCategory = () => {
-        fetch(`${BaseUrl}/readExclusivecategory`, {
+        fetch(`${this.props.BaseUrl}/readExclusivecategory`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -46,7 +47,7 @@ export default class ExclusiveCategory extends Component {
 
 
     AddExclusive = () => {
-        const { Name} = this.state;
+        const { Name } = this.state;
 
 
         let body = {
@@ -54,11 +55,10 @@ export default class ExclusiveCategory extends Component {
 
         }
 
-        fetch(`${BaseUrl}/addExclusiveCategory`, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl}/addExclusiveCategory`, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
-                if(response)
-                {
+                if (response) {
                     this.getExlusiveCategory();
                 }
 
@@ -70,22 +70,24 @@ export default class ExclusiveCategory extends Component {
 
 
 
-   
 
 
-    
+
+
     delete(item) {
 
         let body = {
             Id: item._id
         }
-        fetch(`${BaseUrl}/deleteExclusivecategory`, 
-        { method: "DELETE", 
-        body: JSON.stringify(body), 
-        headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl}/deleteExclusivecategory`,
+            {
+                method: "DELETE",
+                body: JSON.stringify(body),
+                headers: { "Content-Type": "application/json" }
+            })
             .then(res => res.json())
             .then(response => {
-       
+
                 let data = this.state.ExclusiveCategoryData.filter(elem => {
                     return elem._id !== response._id;
 
@@ -109,7 +111,7 @@ export default class ExclusiveCategory extends Component {
             Name: Name,
         }
 
-        fetch(`${BaseUrl}/updateexclusiveCategory`, { method: "PUT", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl}/updateexclusiveCategory`, { method: "PUT", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
                 this.setState({ updateModal: false })
@@ -127,15 +129,15 @@ export default class ExclusiveCategory extends Component {
 
 
     renderExlusiveCategory() {
-        const { ExclusiveCategoryData } = this.state;        
+        const { ExclusiveCategoryData } = this.state;
         return ExclusiveCategoryData.map((item, i) => {
             return (
 
                 <tr key={i}>
                     <td >{item.Name}</td>
-                
+
                     <td>
-                        <a href={DEMO.BLANK_LINK} className="label btn-sm bg-info text-white f-12" onClick={() => this.setState({ updateModal: true, Id: item._id,Name:item.Name })}><i className="icon feather icon-edit text-white" /> Update</a>
+                        <a href={DEMO.BLANK_LINK} className="label btn-sm bg-info text-white f-12" onClick={() => this.setState({ updateModal: true, Id: item._id, Name: item.Name })}><i className="icon feather icon-edit text-white" /> Update</a>
                         <a href={DEMO.BLANK_LINK} className="label btn-sm bg-danger text-white f-12" onClick={() => this.delete(item)}><i className="icon feather icon-trash-2 text-white" /> Delete</a>
 
                     </td>
@@ -174,7 +176,7 @@ export default class ExclusiveCategory extends Component {
                                     <thead className="bg-dark text-white">
                                         <tr>
                                             <th>Name</th>
-                                          
+
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -194,7 +196,7 @@ export default class ExclusiveCategory extends Component {
 
 
 
-                    
+
 
 
                     {/* Update Modal */}
@@ -222,7 +224,7 @@ export default class ExclusiveCategory extends Component {
 
 
 
-                              
+
 
                                 <a href={DEMO.BLANK_LINK} className="label btn-sm bg-success text-white f-12" onClick={this.updateExclusiveCategory}><i className="icon feather icon-trash-2 text-white" />Update</a>
 
@@ -252,7 +254,7 @@ export default class ExclusiveCategory extends Component {
                                 <Form.Label>Name</Form.Label>
                                 <Form.Control type="text" placeholder="Enter Name..." onChange={(e) => { this.setState({ Name: e.target.value }) }} />
                             </Form.Group>
-                            
+
                             <a href={DEMO.BLANK_LINK} className="label btn-sm bg-success text-white f-12" onClick={this.AddExclusive}><i className="icon feather icon-trash-2 text-white" />Add</a>
 
                         </Modal.Body>
@@ -266,4 +268,16 @@ export default class ExclusiveCategory extends Component {
         )
     }
 }
+const mapStateToProps = (state) => {
+    return {
 
+        BaseUrl: state.Baseurl,
+
+
+    }
+
+
+}
+
+
+export default connect(mapStateToProps, null)(ExclusiveCategory);

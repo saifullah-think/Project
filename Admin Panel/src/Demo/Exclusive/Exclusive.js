@@ -2,20 +2,18 @@ import React, { Component } from 'react'
 import { Row, Col, Card, Table, Tabs, Tab, InputGroup, FormControl, Modal, Form } from 'react-bootstrap';
 import Aux from "../../hoc/_Aux";
 import DEMO from "../../store/constant";
-import {firebase} from '../../Config/Firebase'
-import BaseUrl from '../Api/Api'
+import { firebase } from '../../Config/Firebase'
+import { connect } from 'react-redux'
 
 
 
-
-
-export default class Exclusive extends Component {
+class Exclusive extends Component {
 
     state = {
         ViewModal: false,
         count: 1,
         ExclusiveData: [],
-        CategoryData:[],
+        CategoryData: [],
         Image: '',
         BusinessName: '',
         Contact: '',
@@ -39,11 +37,10 @@ export default class Exclusive extends Component {
         this.getExlusive();
         this.getCategory();
 
-
     }
 
     getExlusive = () => {
-        fetch(`${BaseUrl}/readexclusiveuserdata`, {
+        fetch(`${this.props.BaseUrl}/readexclusiveuserdata`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -53,18 +50,16 @@ export default class Exclusive extends Component {
         })
             .then((response) => response.json())
             .then((responseData) => {
-                
                 this.setState({ ExclusiveData: responseData })
             }).catch((err) => {
-                alert(err.message)
+                alert("message====>", err.message)
             })
 
 
     }
 
-    getCategory = () =>
-    {
-        fetch(`${BaseUrl}/readExclusivecategory`, {
+    getCategory = () => {
+        fetch(`${this.props.BaseUrl}/readExclusivecategory`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -74,8 +69,7 @@ export default class Exclusive extends Component {
         })
             .then((response) => response.json())
             .then((responseData) => {
-                console.log("resp===>", responseData)
-                this.setState({CategoryData:responseData })
+                this.setState({ CategoryData: responseData })
             }).catch((err) => {
                 alert(err.message)
             })
@@ -102,7 +96,7 @@ export default class Exclusive extends Component {
 
         }
 
-        fetch(`${BaseUrl}/requestforregisteration`, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl}/requestforregisteration`, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
 
@@ -127,7 +121,7 @@ export default class Exclusive extends Component {
             BusinessDetail: BusinessDetail,
         }
 
-        fetch(`${BaseUrl}/updateexclusiveuserdata`, { method: "PUT", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl}/updateexclusiveuserdata`, { method: "PUT", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
                 this.setState({ updateModal: false })
@@ -149,7 +143,6 @@ export default class Exclusive extends Component {
 
         mountainImagesRef.put(SelectImage).then(() => {
             mountainImagesRef.getDownloadURL().then((url) => {
-                console.log("url===>", url)
                 this.setState({ Imageurl: url })
                 if (this.state.Imageurl !== '') {
                     let body =
@@ -158,7 +151,7 @@ export default class Exclusive extends Component {
                         Image: this.state.Imageurl
                     }
 
-                    fetch('`${BaseUrl}/changeprofileimage', { method: "PUT", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+                    fetch(`${this.props.BaseUrl}/changeprofileimage`, { method: "PUT", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
                         .then(res => res.json())
                         .then(response => {
                             if (response) {
@@ -181,32 +174,30 @@ export default class Exclusive extends Component {
     }
 
 
-    updateRegister  (item) 
-    {
-      let body=
-      {
-          Id:item._id
-      }
-      
-
-        fetch(`${BaseUrl}/readAcceptRequest`, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
-        .then(res => res.json())
-        .then(response => {
-          if(response)
-          {
-              this.getExlusive();
-          }
-        
+    updateRegister(item) {
+        let body =
+        {
+            Id: item._id
+        }
 
 
-        }).catch(err => alert(err))
-    
+        fetch(`${this.props.BaseUrl}/readAcceptRequest`, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+            .then(res => res.json())
+            .then(response => {
+                if (response) {
+                    this.getExlusive();
+                }
+
+
+
+            }).catch(err => alert(err))
+
     }
 
     renderExlusive() {
         const { ExclusiveData } = this.state;
         return ExclusiveData.map((item, i) => {
-    
+
             return (
 
                 <tr key={i}>
@@ -218,14 +209,14 @@ export default class Exclusive extends Component {
                     <td>{item.Country}</td>
                     <td>{item.BusinessDetail}</td>
                     <td>{item.Password}</td>
-                    <td>{item.isRegistered==true?<a href={DEMO.BLANK_LINK} className="label btn-sm bg-success text-white f-12" ><i className="icon feather  icon-check text-white" /> Approved</a>
-:<a href={DEMO.BLANK_LINK} className="label btn-sm bg-danger text-white f-12"  onClick={()=> this.updateRegister(item)}><i className="icon feather icon-x-circle text-white" /> Accept Approved</a>
-}</td>
+                    <td>{item.isRegistered == true ? <a href={DEMO.BLANK_LINK} className="label btn-sm bg-success text-white f-12" ><i className="icon feather  icon-check text-white" /> Approved</a>
+                        : <a href={DEMO.BLANK_LINK} className="label btn-sm bg-danger text-white f-12" onClick={() => this.updateRegister(item)}><i className="icon feather icon-x-circle text-white" /> Accept Approved</a>
+                    }</td>
 
                     <td>
                         <a href={DEMO.BLANK_LINK} className="label btn-sm bg-success text-white f-12" onClick={() => this.setState({ ViewModal: true, Image: item.Image, BusinessName: item.BusinessName, Email: item.Email, Contact: item.Contact, Category: item.Category, Country: item.Country, BusinessDetail: item.BusinessDetail, Password: item.Password, isRegistered: item.isRegistered })}><i className="icon feather icon-eye text-white" /> View</a>
                         <a href={DEMO.BLANK_LINK} className="label btn-sm bg-info text-white f-12" onClick={() => this.setState({ updateModal: true, Id: item._id })}><i className="icon feather icon-edit text-white" />  Update</a>
-                        <a href={DEMO.BLANK_LINK} className="label btn-sm bg-primary text-white f-12" onClick={() => this.setState({ ImageModal: true, Image: item.Image, Id: item._id })}><i className="icon feather icon-trash-2 text-white" style={{color:'black'}} /> Change Image</a>
+                        <a href={DEMO.BLANK_LINK} className="label btn-sm bg-primary text-white f-12" onClick={() => this.setState({ ImageModal: true, Image: item.Image, Id: item._id })}><i className="icon feather icon-trash-2 text-white" style={{ color: 'black' }} /> Change Image</a>
 
                     </td>
 
@@ -364,17 +355,17 @@ export default class Exclusive extends Component {
 
 
                                 <Form.Group controlId="exampleForm.ControlSelect1">
-    <Form.Label>Category</Form.Label>
-    <Form.Control as="select" onChange={(e)=>{this.setState({Category:e.target.value})}}>
-    {this.state.CategoryData.map((item,i)=>{
-        
-    return (
+                                    <Form.Label>Category</Form.Label>
+                                    <Form.Control as="select" onChange={(e) => { this.setState({ Category: e.target.value }) }}>
+                                        {this.state.CategoryData.map((item, i) => {
 
-        <option>{item.Name}</option>
-        )
-    })}
-    </Form.Control>
-  </Form.Group>
+                                            return (
+
+                                                <option>{item.Name}</option>
+                                            )
+                                        })}
+                                    </Form.Control>
+                                </Form.Group>
 
                                 <Form.Group controlId="formGroupEmail">
                                     <Form.Label>Country</Form.Label>
@@ -497,3 +488,17 @@ export default class Exclusive extends Component {
     }
 }
 
+
+const mapStateToProps = (state) => {
+    return {
+
+        BaseUrl: state.Baseurl,
+
+
+    }
+
+
+}
+
+
+export default connect(mapStateToProps, null)(Exclusive);

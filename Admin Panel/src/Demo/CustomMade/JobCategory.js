@@ -1,20 +1,21 @@
 import React, { Component } from 'react'
-import { Row, Col, Card, Table, Tabs, Tab, InputGroup, FormControl, Modal ,Form} from 'react-bootstrap';
+import { Row, Col, Card, Table, Tabs, Tab, InputGroup, FormControl, Modal, Form } from 'react-bootstrap';
 import Aux from "../../hoc/_Aux";
 import DEMO from "../../store/constant";
-import BaseUrl from '../Api/Api'
+import { connect } from 'react-redux'
 
-export default class JobCategory extends Component {
+
+class JobCategory extends Component {
 
     state = {
         ViewModal: false,
         count: 1,
         JobCategory: [],
-        Name:'',
-        Image:'',
-        ImageUrl:'',
-        AddModal:''
-     
+        Name: '',
+        Image: '',
+        ImageUrl: '',
+        AddModal: ''
+
 
     }
 
@@ -25,7 +26,7 @@ export default class JobCategory extends Component {
     }
 
     getJobCategory = () => {
-        fetch(`${BaseUrl}/readcategory`, {
+        fetch(`${this.props.BaseUrl == undefined ? "http://localhost:5000/readjob" : `${this.props.BaseUrl}/readcategory`}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -47,11 +48,9 @@ export default class JobCategory extends Component {
         let body = {
             Id: item._id
         }
-        fetch(`${BaseUrl}/deletecategory`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl == undefined ? "http://localhost:5000//deletecategory" : `${this.props.BaseUrl}/deletecategory`}`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
-                console.log(response)
-
                 let data = this.state.JobCategory.filter(elem => {
                     return elem._id !== response._id;
 
@@ -66,48 +65,45 @@ export default class JobCategory extends Component {
     }
 
 
-    AddJobCategory = () =>
-    {
-        let body=
+    AddJobCategory = () => {
+        let body =
         {
-            Name:this.state.Name,
-            Image:this.state.ImageUrl
+            Name: this.state.Name,
+            Image: this.state.ImageUrl
         }
 
-        if(this.state.Name !=='' || this.state.ImageUrl!=='')
-        {
-            
-            fetch(`${BaseUrl}/addcategory`, {
+        if (this.state.Name !== '' || this.state.ImageUrl !== '') {
+
+            fetch(`${this.props.BaseUrl}/addcategory`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body:JSON.stringify(body)
-                
+                body: JSON.stringify(body)
+
             })
-            .then((response) => response.json())
-            .then((responseData) => {
-             console.log(responseData)
-            let data=this.state.JobCategory;
-            data.push(responseData);
-             this.setState({AddModal:false})
-            }).catch((err) => {
-                alert(err.message)
-            })
+                .then((response) => response.json())
+                .then((responseData) => {
+                    let data = this.state.JobCategory;
+                    data.push(responseData);
+                    this.setState({ AddModal: false })
+                }).catch((err) => {
+                    alert(err.message)
+                })
         }
-        else {alert("Please Enter Fileds")}
-            
-        }
-        
+        else { alert("Please Enter Fileds") }
+
+    }
 
 
 
 
 
 
-    renderJobCategory()  {
-        const { JobCategory} = this.state;
+
+    renderJobCategory() {
+        const { JobCategory } = this.state;
         return JobCategory.map((item, i) => {
             return (
 
@@ -116,7 +112,7 @@ export default class JobCategory extends Component {
                     <td >{item.Name}</td>
                     <td>
 
-                        <a href={DEMO.BLANK_LINK} className="label btn-sm bg-success text-white f-12" onClick={() => this.setState({ ViewModal: true, Name:item.Name,Image:item.Image })}><i className="icon feather icon-eye text-white" /> View</a>
+                        <a href={DEMO.BLANK_LINK} className="label btn-sm bg-success text-white f-12" onClick={() => this.setState({ ViewModal: true, Name: item.Name, Image: item.Image })}><i className="icon feather icon-eye text-white" /> View</a>
                         <a href={DEMO.BLANK_LINK} className="label btn-sm bg-info text-white f-12" onClick={() => this.setState({ ViewModal: true, BuyerName: item.BuyerName, BuyerEmail: item.BuyerEmail, ProfilePic: item.ProfilePic, Budget: item.Budget, JobCategory: item.JobCategory, JobTitle: item.JobTitle, Shipping: item.Shipping, PostedDate: item.PostedDate, JobDetail: item.JobDetail })}><i className="icon feather icon-edit text-white" /> Update</a>
                         <a href={DEMO.BLANK_LINK} className="label btn-sm bg-danger text-white f-12" onClick={() => this.delete(item)}><i className="icon feather icon-trash-2 text-white" /> Delete</a>
                     </td>
@@ -124,7 +120,7 @@ export default class JobCategory extends Component {
 
 
                 </tr>
-           )
+            )
         })
 
 
@@ -153,7 +149,7 @@ export default class JobCategory extends Component {
                         <Card className='Recent-Users'>
                             <Card.Header>
                                 <Card.Title as='h5'>Jobs Category</Card.Title>
-                                <a href={DEMO.BLANK_LINK} style={{float:'right'}} className="label btn-sm bg-dark text-white f-12" onClick={() => this.setState({ AddModal: true })}><i className="icon feather icon-plus text-white" /> Add Job-Category</a>
+                                <a href={DEMO.BLANK_LINK} style={{ float: 'right' }} className="label btn-sm bg-dark text-white f-12" onClick={() => this.setState({ AddModal: true })}><i className="icon feather icon-plus text-white" /> Add Job-Category</a>
                             </Card.Header>
                             <Card.Body className='px-0 py-2'>
                                 <Table responsive hover>
@@ -173,7 +169,7 @@ export default class JobCategory extends Component {
                             </Card.Body>
                         </Card>
 
-            
+
                     </Col>
 
 
@@ -196,7 +192,7 @@ export default class JobCategory extends Component {
                                     </h5>
                                     <h5 style={{ fontWeight: 'bold' }}>Name:{this.state.Name}</h5>
                                 </div>
-                              
+
 
                             </div>
                         </Modal.Body>
@@ -218,8 +214,8 @@ export default class JobCategory extends Component {
       </Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            
-                        <Form>
+
+                            <Form>
                                 <Form.Group controlId="formGroupEmail">
                                     <Form.Label>Name</Form.Label>
                                     <Form.Control type="text" placeholder="Name..." onChange={(e) => { this.setState({ Name: e.target.value }) }} />
@@ -232,7 +228,7 @@ export default class JobCategory extends Component {
 
                                 <a href={DEMO.BLANK_LINK} className="label btn-sm bg-success text-white f-12" onClick={this.AddJobCategory}><i className="icon feather icon-trash-2 text-white" />Add</a>
 
-                                </Form>  
+                            </Form>
 
                         </Modal.Body>
                     </Modal>
@@ -242,6 +238,21 @@ export default class JobCategory extends Component {
                 </Row>
             </Aux>
         )
+
     }
+
 }
+const mapStateToProps = (state) => {
+    return {
+
+        BaseUrl: state.Baseurl,
+
+
+    }
+
+
+}
+
+
+export default connect(mapStateToProps, null)(JobCategory);
 

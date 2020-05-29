@@ -1,7 +1,7 @@
 import React from 'react';
 import NVD3Chart from 'react-nvd3';
 import {connect} from 'react-redux'
-import BaseUrl from '../Api/Api'
+import Api from '../Api/Api'
 import {MyApiUrl} from '../../store/actions';
 import {Row, Col, Card, Table, Tabs, Tab,Modal,Form} from 'react-bootstrap';
 import Aux from "../../hoc/_Aux";
@@ -149,6 +149,7 @@ class Dashboard extends React.Component {
     render() {
         return (
             <Aux>
+              <Api/>
                 <Row>
                     <Col md={6} xl={4}>
                         <Card className="bg-info text-white">
@@ -205,17 +206,7 @@ class Dashboard extends React.Component {
                                 <Card.Title as='h5'>Recent Users</Card.Title>
 
 
-                                <Form.Group controlId="exampleForm.ControlSelect1">
-                                    <Form.Label> Icon Name</Form.Label>
-                                    <Form.Control as="select" onChange={(e) => this.props.SelectUrl(e.target.value)}>
-                                    <option>{"Select Option"}</option>
-                                    <option>{"http://localhost:5000"}</option>
-                                    <option>{"http://localhost:6000"}</option>
-                                    <option>{"http://localhost:7000"}</option>
-                                    <option>{"http://localhost:8000"}</option>
-                                      
-                                    </Form.Control>
-                                </Form.Group>
+                         
                             </Card.Header>
                             <Card.Body className='px-0 py-2'>
                                 <Table responsive hover>
@@ -323,24 +314,25 @@ function ViewModal(props) {
   );
 }
 
-const mapStateToProps = (state) =>
-{
-  // return {
+// const mapStateToProps = (state) =>
+// {
+//   // return {
 
-  //   myname:state.name.user,
-  //   mycomment:state.Comment.comment
+//   //   myname:state.name.user,
+//   //   mycomment:state.Comment.comment
 
     
-  // }
+//   // }
   
 
-}
+// }
 
-const mapDispatchToProps= (dispatch) =>{  
-  return {
-    SelectUrl:(url) => {dispatch(MyApiUrl(url))},
+// const mapDispatchToProps= (dispatch) =>{  
+//   return {
+//     SelectUrl:(url) => {dispatch(MyApiUrl(url))},
    
-  }
-}
+//   }
+// }
 
-export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);
+// export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);
+export default Dashboard;

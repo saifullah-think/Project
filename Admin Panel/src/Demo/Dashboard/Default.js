@@ -143,7 +143,11 @@ class Dashboard extends React.Component {
       Url:''
     }
 
- 
+   componentDidMount()
+   {
+    var User=JSON.parse(localStorage.getItem('UserInfo'))
+    console.log("USer is here---------->",User.userType)
+   }
 
 
     render() {
@@ -314,25 +318,27 @@ function ViewModal(props) {
   );
 }
 
-// const mapStateToProps = (state) =>
-// {
-//   // return {
+const mapStateToProps = (state) =>
 
-//   //   myname:state.name.user,
-//   //   mycomment:state.Comment.comment
+{
+  console.log("state===>",state)
+  // return {
+
+  //   myname:state.name.user,
+  //   mycomment:state.Comment.comment
 
     
-//   // }
+  // }
   
 
-// }
+}
 
-// const mapDispatchToProps= (dispatch) =>{  
-//   return {
-//     SelectUrl:(url) => {dispatch(MyApiUrl(url))},
+const mapDispatchToProps= (dispatch) =>{  
+  return {
+    SelectUrl:(url) => {dispatch(MyApiUrl(url))},
    
-//   }
-// }
+  }
+}
 
-// export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);
-export default Dashboard;
+export default connect(mapStateToProps,mapDispatchToProps)(Dashboard);
+// export default Dashboard;

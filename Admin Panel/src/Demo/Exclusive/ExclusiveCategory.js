@@ -26,7 +26,7 @@ class ExclusiveCategory extends Component {
     }
 
     getExlusiveCategory = () => {
-        fetch(`${this.props.BaseUrl}/readExclusivecategory`, {
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/readExclusivecategory`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -55,7 +55,7 @@ class ExclusiveCategory extends Component {
 
         }
 
-        fetch(`${this.props.BaseUrl}/addExclusiveCategory`, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/addExclusiveCategory`, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
                 if (response) {
@@ -79,7 +79,7 @@ class ExclusiveCategory extends Component {
         let body = {
             Id: item._id
         }
-        fetch(`${this.props.BaseUrl}/deleteExclusivecategory`,
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/deleteExclusivecategory`,
             {
                 method: "DELETE",
                 body: JSON.stringify(body),
@@ -111,7 +111,7 @@ class ExclusiveCategory extends Component {
             Name: Name,
         }
 
-        fetch(`${this.props.BaseUrl}/updateexclusiveCategory`, { method: "PUT", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/updateexclusiveCategory`, { method: "PUT", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
                 this.setState({ updateModal: false })
@@ -271,7 +271,8 @@ class ExclusiveCategory extends Component {
 const mapStateToProps = (state) => {
     return {
 
-        BaseUrl: state.Baseurl,
+        BaseUrl:state.Baseurl,
+        defaulturl:state.url
 
 
     }

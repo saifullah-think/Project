@@ -43,7 +43,7 @@ class ExclusiveService extends Component {
     }
 
     getExclusiveServiceData = () => {
-        fetch(`${this.props.BaseUrl}/readexclusiveservices`, {
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/readexclusiveservices`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -142,7 +142,7 @@ class ExclusiveService extends Component {
         let body = {
             Id: item._id
         }
-        fetch(`${this.props.BaseUrl}/deleteexclusiveservice`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/deleteexclusiveservice`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
                 let data = this.state.ExclusiveServiceData.filter((list => {
@@ -465,6 +465,7 @@ const mapStateToProps = (state) => {
     return {
 
         BaseUrl: state.Baseurl,
+        defaulturl:state.url
 
 
     }

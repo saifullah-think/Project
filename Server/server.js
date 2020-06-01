@@ -1,7 +1,8 @@
 //Imports
 const express = require('express')
 var http = require('http');
-
+var Cryptr=require('cryptr');
+var cryptr = new Cryptr('Saifullah');
 const app = express()
 var server = http.createServer(app);
 const process = require('process')
@@ -16,7 +17,7 @@ const Drafts = require('./models/DraftListings')
 const Inactive = require('./models/Inactive')
 const Shipping = require('./models/Shipping')
 const fileUpload = require("express-fileupload");
-
+const Admin = require('./models/AdminModel');
 const Category = require('./models/Categories')
 const ExclusiveCategory=require('./models/ExclusiveCategory')
 const Chats = require('./models/Chats')
@@ -80,6 +81,16 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://pureartisann.firebaseio.com"
 });
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+
+
+
 
 //PAYPAL CLIENT ID: AebZVgTaxE1-E1ACZ-q5lAqMWoNyM7oIdrqswPk8QVR52TdnfqpZ21xHmkxYnMnrFjvDNiKKgD05OPgB
 
@@ -267,6 +278,107 @@ app.post('/addPaidListing', (req, res) => {
     })
 
 })
+
+
+
+
+
+
+/// admin api
+
+app.get('/getAllAdmin', (req, res) => {
+
+    Admin.find({}, (err, docs) => {
+        if (err) 
+        { 
+            res.send(res.json(handleErr(err)))
+       
+        }
+
+        else {
+            res.send({
+                message:"Success",
+                doc:docs
+            })
+      
+        }
+    })
+})
+
+
+app.post('/CreateAdmin',(req,res) =>{
+
+    var encrypString = cryptr.encrypt(req.body.password);
+    var decyptString = cryptr.decrypt(encrypString);
+    
+
+    var AdminData =new Admin({
+    
+        Name:req.body.name,
+        Email:req.body.email,
+        Password:encrypString,
+        userType:req.body.usertype
+
+    })
+        
+    try {
+        
+    AdminData.save().then(data => {
+        res.send(handleSuccess(data))
+    })
+        
+    } catch (error) {
+        res.send(handleErr(error))
+        
+    }
+    
+
+})
+
+
+
+
+// delete admin
+app.delete('/deleteAdmin', (req, res) => {
+    Admin.findByIdAndRemove(req.body.id, (err, doc) => {
+        if (err) res.json(err)
+        res.json({
+            message: "Success",
+            data: doc
+        })
+    })
+})
+
+ 
+//Login Admin
+
+
+app.post('/Login',(req,res) =>{
+    
+    Admin.findOne({Email:req.body.email},(err,doc)=>{
+         var decyptString = cryptr.decrypt(doc.Password)
+         if (decyptString==req.body.password){
+            res.send(handleSuccess(doc))
+        }
+        else
+        {
+            
+         res.send(handleErr(err))
+        }
+
+    })
+
+})
+
+
+
+
+
+
+
+
+
+
 
 
 

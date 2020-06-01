@@ -1,18 +1,97 @@
 import React, { Component } from 'react'
 import {Row, Col, Card, Table, Tabs, Tab,InputGroup, FormControl,Modal,Form,Button} from 'react-bootstrap';
 import Aux from "../../hoc/_Aux";
-
 import DEMO from "../../store/constant";
-
-import avatar1 from '../../assets/images/user/avatar-1.jpg';
-import avatar2 from '../../assets/images/user/avatar-2.jpg';
-import avatar3 from '../../assets/images/user/avatar-3.jpg';
 
 export default class ViewAdmins extends Component {
 
     state={
-        showEditModal:false
+        showEditModal:false,
+        ViewModal:false,
+        AdminData:[],
+        AdminName:'',
+        AdminEmail:'',
     }
+
+
+
+
+    componentDidMount()
+    {
+        return fetch('http://localhost:5000/getAllAdmin', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+        })
+            .then((response) => response.json())
+            .then((responseData) => {
+                console.log("Response===>",responseData)
+                this.setState({AdminData:responseData.doc})
+             
+
+
+            }).catch((err) => {
+                alert(err.message)
+            })
+
+    }
+
+
+
+delete (item)
+{
+    let body=
+    {
+        id:item._id
+    }
+
+    fetch(`http://localhost:5000/deleteAdmin`,
+    {
+        method: "DELETE",
+        body: JSON.stringify(body),
+        headers: { "Content-Type": "application/json" }
+    })
+    .then(res => res.json())
+    .then(response => {
+        console.log("response==>",response)
+        let data = this.state.AdminData.filter((elem => {
+            return elem._id != response.data._id;
+        }))
+        this.setState({ AdminData: data })
+
+
+    }).catch(err => alert(err))
+
+}
+
+
+    renderAdmin = () =>
+    {
+        const {AdminData}=this.state;
+        return AdminData.map((item, i) => {
+          return (
+  
+              <tr key={i}>
+                  <td >{item.Name}</td>
+                  <td >{item.Email}</td>
+                  <td>
+                  <a href={DEMO.BLANK_LINK} className="label btn-sm bg-success text-white f-12" onClick={() => this.setState({ViewModal:true,AdminEmail:item.Email,AdminName:item.Name})}><i className="icon feather icon-eye text-white"/> View</a>  
+                 <a href={DEMO.BLANK_LINK} className="label btn-sm bg-danger text-white f-12" onClick={() =>this.delete(item)}><i className="icon feather icon-trash-2 text-white"/>  Delete</a>
+                  </td>
+  
+              </tr>
+  
+  
+  )
+})
+
+
+    
+    }
+
+ 
 
     render() {
         return (
@@ -37,50 +116,54 @@ export default class ViewAdmins extends Component {
                                         <tr>
                                             <th>User Name</th>
                                             <th>Email</th>
-                                            <th>Role</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Mark</td>
-                                            <td>abc@g.c</td>
-                                            <td>abc</td>
-                                            <td>
-                                                <a href={DEMO.BLANK_LINK} className="label btn-sm bg-info text-white f-12" onClick={() => this.setState({showEditModal:true})}><i className="icon feather icon-edit text-white"/> Edit</a>
-                                                <a href={DEMO.BLANK_LINK} className="label btn-sm bg-danger text-white f-12"><i className="icon feather icon-trash-2 text-white"/>  Delete</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jacob</td>
-                                            <td>abc@g.c</td>
-                                            <td>abc</td>
-                                            <td>
-                                                <a href={DEMO.BLANK_LINK} className="label btn-sm bg-info text-white f-12" onClick={() => this.setState({showEditModal:true})}><i className="icon feather icon-edit text-white"/> Edit</a>
-                                                <a href={DEMO.BLANK_LINK} className="label btn-sm bg-danger text-white f-12"><i className="icon feather icon-trash-2 text-white"/>  Delete</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Larry</td>
-                                            <td>abc@g.c</td>
-                                            <td>abc</td>
-                                            <td>
-                                                <a href={DEMO.BLANK_LINK} className="label btn-sm bg-info text-white f-12" onClick={() => this.setState({showEditModal:true})}><i className="icon feather icon-edit text-white"/> Edit</a>
-                                                <a href={DEMO.BLANK_LINK} className="label btn-sm bg-danger text-white f-12"><i className="icon feather icon-trash-2 text-white"/>  Delete</a>
-                                            </td>
-                                        </tr>
+                                        {this.renderAdmin()}
                                     </tbody>
                                 </Table>
                             </Card.Body>
                         </Card>
                     </Col>
-
+{/* 
                     <EditAdmin
                         show={this.state.showEditModal}
                         onHide={() => this.setState({showEditModal:false})}
-                    />
+                    /> */}
                 </Row>
                 
+
+
+
+                <Modal
+                            show={this.state.ViewModal}
+                            size="md"
+                            aria-labelledby="contained-modal-title-vcenter"
+                            centered
+                        >
+                            <Modal.Header className="bg-dark text-white" closeButton onClick={() => { this.setState({ ViewModal: false }) }}>
+                                <Modal.Title id="contained-modal-title-vcenter">
+                                Admin
+      </Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                            <div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                 <h5 style={{ fontWeight: 'bold' }}>Email:{this.state.AdminEmail}</h5>
+                                </div>
+             
+                                
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                 <h5 style={{ fontWeight: 'bold' }}>Name:{this.state.AdminName}</h5>
+                                </div>
+             
+                                
+
+                            </div>
+                        </Modal.Body>
+                        </Modal>
+
             </Aux>
         )
     }

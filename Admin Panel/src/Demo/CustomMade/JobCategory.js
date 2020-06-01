@@ -26,7 +26,7 @@ class JobCategory extends Component {
     }
 
     getJobCategory = () => {
-        fetch(`${this.props.BaseUrl == undefined ? "http://localhost:5000/readjob" : `${this.props.BaseUrl}/readcategory`}`, {
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/readcategory`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -48,7 +48,7 @@ class JobCategory extends Component {
         let body = {
             Id: item._id
         }
-        fetch(`${this.props.BaseUrl == undefined ? "http://localhost:5000//deletecategory" : `${this.props.BaseUrl}/deletecategory`}`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/deletecategory`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
                 let data = this.state.JobCategory.filter(elem => {
@@ -74,7 +74,7 @@ class JobCategory extends Component {
 
         if (this.state.Name !== '' || this.state.ImageUrl !== '') {
 
-            fetch(`${this.props.BaseUrl}/addcategory`, {
+            fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/addcategory`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -246,6 +246,7 @@ const mapStateToProps = (state) => {
     return {
 
         BaseUrl: state.Baseurl,
+        defaulturl:state.url
 
 
     }

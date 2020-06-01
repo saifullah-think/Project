@@ -43,7 +43,7 @@ import {Input,message, Upload} from 'antd'
 
 
     FetchBlogs = () => {
-        return fetch(`${this.props.BaseUrl}/readblogs`, {
+        return fetch(`${this.props.Baseurl==undefined?this.props.defaulturl:this.props.BaseUrl}/readblogs`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -73,7 +73,7 @@ import {Input,message, Upload} from 'antd'
 
         }
 
-        fetch(`${this.props.BaseUrl}/api/deleteBlog`,
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/api/deleteBlog`,
             {
                 method: "DELETE",
                 body: JSON.stringify(body),
@@ -129,7 +129,7 @@ import {Input,message, Upload} from 'antd'
         }
         if (this.state.CatName !== '') {
 
-            fetch(`${this.props.BaseUrl}/addblogcategory`,
+            fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/addblogcategory`,
                 {
                     method: "POST",
                     body: JSON.stringify(body),
@@ -179,7 +179,7 @@ import {Input,message, Upload} from 'antd'
             comments:[]
         }
       
-        fetch(`${this.props.BaseUrl}/addnewblog`,
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/addnewblog`,
             {
                 method: "PUT",
                 body: JSON.stringify(blog),
@@ -424,7 +424,7 @@ const mapStateToProps = (state) =>
   return {
 
  BaseUrl:state.Baseurl,
-
+ defaulturl:state.url
     
   }
   

@@ -25,7 +25,7 @@ import { connect } from 'react-redux'
     }
 
     getAllUser = () => {
-        fetch(`${this.props.BaseUrl}/api/getUsers:${this.state.count}`, {
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/api/getUsers:${this.state.count}`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -47,7 +47,7 @@ import { connect } from 'react-redux'
         let body = {
             uid: item.firebaseUID
         }
-        fetch(`${this.props.BaseUrl}/api/deleteAdminOrUSer`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/api/deleteAdminOrUSer`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
 
@@ -71,7 +71,7 @@ import { connect } from 'react-redux'
             uid: item.firebaseUID
         }
 
-        fetch(`${this.props.BaseUrl}/api/bloclkuser`, {
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/api/bloclkuser`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -102,7 +102,7 @@ import { connect } from 'react-redux'
         }
 
 
-        fetch(`${this.props.BaseUrl}/api/Unbloclkuser`, {
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/api/Unbloclkuser`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -126,7 +126,7 @@ import { connect } from 'react-redux'
             name: e.target.value
         }
 
-        fetch(`${this.props.BaseUrl}/api/userSearch`, {
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/api/userSearch`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -261,6 +261,7 @@ const mapStateToProps = (state) => {
 
         
         BaseUrl: state.Baseurl,
+        defaulturl:state.url,
 
     }
 

@@ -27,7 +27,7 @@ class Order extends Component {
     }
 
     getOrder = () => {
-        fetch(`${this.props.BaseUrl}/readorders`, {
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/readorders`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -49,7 +49,7 @@ class Order extends Component {
         let body = {
             Id: item._id
         }
-        fetch(`${this.props.BaseUrl}/deletejob`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/deletejob`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
 
@@ -197,6 +197,7 @@ const mapStateToProps = (state) => {
     return {
 
         BaseUrl: state.Baseurl,
+        defaulturl:state.url,
 
 
     }

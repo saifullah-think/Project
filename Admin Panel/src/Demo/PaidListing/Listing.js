@@ -23,7 +23,9 @@ class Listing extends Component {
 
 
     FetchData = () => {
-        return fetch(`${this.props.BaseUrl}/readPaidListing`, {
+       
+     
+        return fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/readPaidListing`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -52,7 +54,7 @@ class Listing extends Component {
             Status: this.state.Status
         }
         if (this.state.Status !== 'Select Status') {
-            return fetch(`${this.props.BaseUrl == undefined ? console.log("chala") : `${this.props.BaseUrl}/UpdateStatus`}`, {
+            return fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/UpdateStatus`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -201,10 +203,12 @@ class Listing extends Component {
 
 
 const mapStateToProps = (state) => {
+    console.log(state)
 
     return {
 
         BaseUrl: state.Baseurl,
+        defaulturl:state.url
 
 
     }

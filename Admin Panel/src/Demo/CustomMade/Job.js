@@ -32,7 +32,7 @@ class Jobs extends Component {
     }
 
     getJob = () => {
-        fetch(`${this.props.BaseUrl}/readjob`, {
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/readjob`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -54,7 +54,7 @@ class Jobs extends Component {
         let body = {
             Id: item._id
         }
-        fetch(`${this.props.BaseUrl}/deletejob`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/deletejob`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
 
@@ -209,6 +209,7 @@ const mapStateToProps = (state) => {
     return {
 
         BaseUrl: state.Baseurl,
+        defaulturl:state.url
 
 
     }

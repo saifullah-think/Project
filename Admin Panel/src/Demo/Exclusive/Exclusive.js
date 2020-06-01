@@ -40,7 +40,7 @@ class Exclusive extends Component {
     }
 
     getExlusive = () => {
-        fetch(`${this.props.BaseUrl}/readexclusiveuserdata`, {
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/readexclusiveuserdata`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -59,7 +59,7 @@ class Exclusive extends Component {
     }
 
     getCategory = () => {
-        fetch(`${this.props.BaseUrl}/readExclusivecategory`, {
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/readExclusivecategory`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -96,7 +96,7 @@ class Exclusive extends Component {
 
         }
 
-        fetch(`${this.props.BaseUrl}/requestforregisteration`, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/requestforregisteration`, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
 
@@ -121,7 +121,7 @@ class Exclusive extends Component {
             BusinessDetail: BusinessDetail,
         }
 
-        fetch(`${this.props.BaseUrl}/updateexclusiveuserdata`, { method: "PUT", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/updateexclusiveuserdata`, { method: "PUT", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
                 this.setState({ updateModal: false })
@@ -151,7 +151,7 @@ class Exclusive extends Component {
                         Image: this.state.Imageurl
                     }
 
-                    fetch(`${this.props.BaseUrl}/changeprofileimage`, { method: "PUT", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+                    fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/changeprofileimage`, { method: "PUT", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
                         .then(res => res.json())
                         .then(response => {
                             if (response) {
@@ -181,7 +181,7 @@ class Exclusive extends Component {
         }
 
 
-        fetch(`${this.props.BaseUrl}/readAcceptRequest`, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/readAcceptRequest`, { method: "POST", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
                 if (response) {
@@ -493,6 +493,7 @@ const mapStateToProps = (state) => {
     return {
 
         BaseUrl: state.Baseurl,
+        defaulturl:state.url
 
 
     }

@@ -32,7 +32,7 @@ class Listing extends Component {
 
 
     FetchListing = () => {
-        fetch(`${this.props.BaseUrl}/api/getListings:${this.state.count}`, {
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/api/getListings:${this.state.count}`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -55,7 +55,7 @@ class Listing extends Component {
         let body = {
             id: item._id
         }
-        fetch(`${this.props.BaseUrl}/api/deleteListing`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/api/deleteListing`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
                 let data = this.state.ListingData.filter((list => {
@@ -84,7 +84,7 @@ class Listing extends Component {
             {
                 title: e.target.value
             }
-            fetch(`${this.props.BaseUrl}/api/searchListing`, {
+            fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/api/searchListing`, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -235,6 +235,7 @@ const mapStateToProps = (state) => {
     return {
 
         BaseUrl: state.Baseurl,
+        defaulturl:state.url
 
 
     }

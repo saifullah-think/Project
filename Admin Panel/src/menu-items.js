@@ -135,13 +135,7 @@ export default {
 
 
 
-                {
-                    id: 'Admins',
-                    title: 'Admins',
-                    type: 'collapse',
-                    icon: 'feather icon-user',
-                    children: [
-                        {
+                      {
                             id: 'admin-1',
                             title: 'Create Admin',
                             type: 'item',
@@ -154,8 +148,8 @@ export default {
                             url: '/admin/view-admins',
                         },
                         
-                    ]
-                },
+                    
+            
             ]
         },
 

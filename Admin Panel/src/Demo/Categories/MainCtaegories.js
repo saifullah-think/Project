@@ -42,6 +42,7 @@ class MainCategory extends Component {
         this.getAllCategories();
 
     }
+
     handleChangeComplete = (color) => {
 
         this.setState({ background: color.hex });
@@ -49,7 +50,8 @@ class MainCategory extends Component {
 
 
     getAllCategories = () => {
-        return fetch(`http://localhost:5000/api/getCategories`, {
+
+        return fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/api/getCategories`, {
 
         })
             .then((response) => response.json())
@@ -73,7 +75,7 @@ class MainCategory extends Component {
         }
         if (Name !== '' || SelectIcon !== '' || SetColor !== '') {
 
-            fetch(`${this.props.BaseUrl}/api/addCategory`, {
+            fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/api/addCategory`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -104,7 +106,7 @@ class MainCategory extends Component {
         let body = {
             id: item._id
         }
-        fetch(`${this.props.BaseUrl}/api/deleteCategory`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/api/deleteCategory`, { method: "DELETE", body: JSON.stringify(body), headers: { "Content-Type": "application/json" } })
             .then(res => res.json())
             .then(response => {
                 let data = this.state.CategoryData.filter(elem => {
@@ -185,7 +187,7 @@ class MainCategory extends Component {
             iconType: SelectIcon,
             iconName: iconName,
         }
-        fetch(`${this.props.BaseUrl}/api/updateCat`, {
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/api/updateCat`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -220,7 +222,7 @@ class MainCategory extends Component {
         }
 
 
-        fetch(`${this.props.BaseUrl}/api/updateCat`, {
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/api/updateCat`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -256,7 +258,7 @@ class MainCategory extends Component {
             iconName: SelectIcon
         }
 
-        fetch(`${this.props.BaseUrl}/api/addSubCategory`, {
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/api/addSubCategory`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -285,7 +287,7 @@ class MainCategory extends Component {
             id: this.state.categoryId,
             subCategories: filtered
         }
-        fetch(`${this.props.BaseUrl}/api/deleteSubCategory`,
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/api/deleteSubCategory`,
             {
                 method: "PUT",
                 body: JSON.stringify(body),
@@ -330,7 +332,7 @@ class MainCategory extends Component {
         }
 
 
-        fetch(`${this.props.BaseUrl}/api/updateSubCat`, {
+        fetch(`${this.props.BaseUrl==undefined?this.props.defaulturl:this.props.BaseUrl}/api/updateSubCat`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -730,6 +732,8 @@ const mapStateToProps = (state) => {
     return {
 
         BaseUrl: state.Baseurl,
+        defaulturl:state.url
+    
 
 
     }
